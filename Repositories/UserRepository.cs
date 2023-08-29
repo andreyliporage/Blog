@@ -12,7 +12,7 @@ namespace Blog.Repositories
     public class UserRepository : Repository<User>
     {
         private readonly SqlConnection _connection;
-        public UserRepository(SqlConnection connection) : base(Database.Connection)
+        public UserRepository(SqlConnection connection) : base(connection)
         {
             _connection = connection;
         }
