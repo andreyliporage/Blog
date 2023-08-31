@@ -1,49 +1,31 @@
-﻿using Blog;
+﻿using Blog.Data;
 using Blog.Models;
-using Blog.Repositories;
-using Blog.Screens.RolesScreen;
-using Blog.Screens.UserRoleScreen;
-using Blog.Screens.UserScreen;
-using Microsoft.Data.SqlClient;
 
-const string CONNECTION_STRING = @"Server=localhost,1433;Database=Blog;User ID=sa;Password=1q2w3e4r@#$;Trusted_Connection=False; TrustServerCertificate=True;";
-Database.Connection = new SqlConnection(CONNECTION_STRING);
+using var context = new BlogDataContext();
 
-Database.Connection.Open();
-
-Load();
-
-Database.Connection.Close();
-
-static void Load()
+var user = new User() 
 {
-    Console.Clear();
-    Console.WriteLine("Meu Blog");
-    Console.WriteLine("-----------------");
-    Console.WriteLine("O que deseja fazer?");
-    Console.WriteLine();
-    Console.WriteLine("1 - Gestão de usuário");
-    Console.WriteLine("2 - Gestão de perfil");
-    Console.WriteLine("3 - Gestão de categoria");
-    Console.WriteLine("4 - Gestão de tag");
-    Console.WriteLine("5 - Vincular perfil/usuário");
-    Console.WriteLine("6 - Vincular post/tag");
-    Console.WriteLine("7 - Relatórios");
-    Console.WriteLine();
-    Console.WriteLine();
-    var option = short.Parse(Console.ReadLine()!);
+    Name = "Andrey Liporage de Matos",
+    Bio = "Desenvolvedor FullStack",
+    Email = "andreydev.io@gmail.com",
+    Image = "google.com",
+    PasswordHash = "a1b2c3d4e5f6",
+    Slug = "andlmat"
+};
 
-    switch (option)
-    {
-        case 1:
-            MenuUserScreen.Load();
-            break;
-        case 2:
-            MenuRoleScreen.Load();
-            break;
-        case 5:
-            VinculaUserRole.Load();
-            break;
-        default: Load(); break;
-    }
-}
+var category = new Category() { Name = "Banckend", Slug = "backend" };
+
+var post = new Post()
+{
+    Author = user,
+    Category = category,
+    Body = "<p>Hello World</p>",
+    Slug = "comecando-com-ef-core",
+    Summary = "Aprendendo EF Core",
+    Title = "Començando com EF Core",
+    CreateDate = DateTime.Now,
+    LastUpdateDate = DateTime.Now
+};
+
+context.Posts.Add(post);
+context.SaveChanges();
