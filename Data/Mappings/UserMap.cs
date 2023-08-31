@@ -32,6 +32,20 @@ namespace Blog.Data.Mappings
             
             builder.HasIndex(x => x.Slug, "IX_User_Slug")
                 .IsUnique();
+
+            builder.HasMany(x => x.Roles)
+                .WithMany(x => x.Users)
+                .UsingEntity<Dictionary<string, object>>(
+                    "UserRole",
+                    user => user.HasOne<Role>()
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("FK_UserRole_UserId")
+                        .OnDelete(DeleteBehavior.Cascade),
+                    role => role.HasOne<User>()
+                        .WithMany()
+                        .HasForeignKey("FK_UserRole_RoleId")
+                        .OnDelete(DeleteBehavior.Cascade));
         }
     }
 }
